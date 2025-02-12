@@ -13,4 +13,3 @@ A simple **Labyrinth Game** built with **HTML, CSS, and JavaScript**. Navigate t
 - **JavaScript** – Game logic
 - **SweetAlert** – Pop-up messages
 
-## 📂 Project Structure
