@@ -1,0 +1,39 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1e1e1e;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+#labirint {
+    display: grid;
+    gap: 2px;
+    background-color: #333;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.celica {
+    width: 30px;
+    height: 30px;
+    background-color: #444;
+}
+
+.zid {
+    background-color: black;
+}
+
+.kocka {
+    background-color: #ff5722;
+    border-radius: 5px;
+}
+
+.cilj {
+    background-color: #00ff00 !important;
+    border: 3px solid white;
+}
