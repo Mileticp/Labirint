@@ -1,107 +1,172 @@
-const velikost = 15;
-const labirint = document.getElementById('labirint');
-let kocka, cilj, mazeGrid;
+document.addEventListener('DOMContentLoaded', () => {
+    const labyrinth = document.getElementById('labyrinth');
+    const showPathButton = document.getElementById('showPath');
+    const gridSize = 20; // Larger grid
+    let playerPosition = { x: 1, y: 1 }; // Starting position
 
-//sweetalert
-function showInstructions() {
-    swal("Welcome to the Labyrinth Game!", "Use the arrow keys to navigate the maze. Reach the green square to win!", "info");
-}
+    // Show instructions using SweetAlert
+    swal("Welcome to the Labyrinth Game!", "Use the arrow keys to navigate through the labyrinth. Reach the green finish area to win!");
 
-function generateMaze() {
-    let grid = Array.from({ length: velikost }, () => Array(velikost).fill('zid'));
-    let stack = [];
-    let x = 0, y = 0;
-    grid[y][x] = 'pot';
-    stack.push([x, y]);
-
-    //mozne strani
-    let directions = [
-        [0, -2], [0, 2], [-2, 0], [2, 0]
+    // Fixed maze layout (1 = wall, 0 = path)
+    const layout = [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
+        [1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1],
+        [1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1],
+        [1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1],
+        [1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1],
+        [1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1],
+        [1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1],
+        [1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1],
+        [1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1],
+        [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1],
+        [1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1],
+        [1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
     ];
 
-    //preverja zide
-    while (stack.length > 0) {
-        let [cx, cy] = stack[stack.length - 1];
-        let possibleMoves = directions.map(([dx, dy]) => [cx + dx, cy + dy])
-            .filter(([nx, ny]) => nx >= 0 && ny >= 0 && nx < velikost && ny < velikost && grid[ny][nx] === 'zid');
+    // Function to render the maze
+    function renderMaze() {
+        labyrinth.innerHTML = ''; // Clear previous maze
+        for (let y = 0; y < gridSize; y++) {
+            for (let x = 0; x < gridSize; x++) {
+                const cell = document.createElement('div');
+                cell.classList.add('cell');
 
-        //path do cilja
-        if (possibleMoves.length > 0) {
-            let [nx, ny] = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
-            grid[(cy + ny) / 2][(cx + nx) / 2] = 'pot';
-            grid[ny][nx] = 'pot';
-            stack.push([nx, ny]);
-        } else {
-            stack.pop();
-        }
-    }
+                if (layout[y][x] === 1) {
+                    cell.classList.add('wall');
+                }
 
-    //player in cilj
-    grid[0][0] = 'kocka';
-    grid[velikost - 1][velikost - 1] = 'cilj';
-    return grid;
-}
+                if (x === 1 && y === 1) {
+                    cell.classList.add('start');
+                }
 
-//prikaz (
-function generirajLabirint() {
-    labirint.innerHTML = '';
-    labirint.style.gridTemplateColumns = `repeat(${velikost}, 30px)`;
-    mazeGrid = generateMaze();
+                if (x === gridSize - 2 && y === gridSize - 2) {
+                    cell.classList.add('finish');
+                }
 
-    //divi z usako celico
-    for (let i = 0; i < velikost; i++) {
-        for (let j = 0; j < velikost; j++) {
-            const celica = document.createElement('div');
-            celica.classList.add('celica');
-            if (mazeGrid[i][j] === 'kocka') {
-                celica.classList.add('kocka');
-                kocka = celica;
-            } else if (mazeGrid[i][j] === 'cilj') {
-                celica.classList.add('cilj');
-                cilj = celica;
-            } else if (mazeGrid[i][j] === 'zid') {
-                celica.classList.add('zid');
+                labyrinth.appendChild(cell);
             }
-            labirint.appendChild(celica); //appenda celice u labirint
+        }
+
+        // Place the player at the starting position
+        const player = document.createElement('div');
+        player.classList.add('player');
+        labyrinth.children[playerPosition.y * gridSize + playerPosition.x].appendChild(player);
+    }
+
+    // Function to handle player movement
+    function movePlayer(dx, dy) {
+        const newX = playerPosition.x + dx;
+        const newY = playerPosition.y + dy;
+
+        if (newX >= 0 && newX < gridSize && newY >= 0 && newY < gridSize) {
+            const cell = labyrinth.children[newY * gridSize + newX];
+            if (!cell.classList.contains('wall')) {
+                // Remove the player from the current cell
+                const currentCell = labyrinth.children[playerPosition.y * gridSize + playerPosition.x];
+                currentCell.classList.remove('player');
+
+                // Update player position
+                playerPosition.x = newX;
+                playerPosition.y = newY;
+
+                // Add the player to the new cell
+                cell.classList.add('player');
+
+                // Check if the player reached the finish
+                if (playerPosition.x === gridSize - 2 && playerPosition.y === gridSize - 2) {
+                    swal("Congratulations!", "You've reached the finish!", "success")
+                        .then(() => {
+                            // Reload the page to reset the game
+                            window.location.reload();
+                        });
+                }
+            }
         }
     }
-}
 
-generirajLabirint();
-showInstructions();
+    // Function to show the solution path (using BFS algorithm)
+    function showSolution() {
+        // Clear any previously shown path
+        const pathCells = document.querySelectorAll('.path');
+        pathCells.forEach(cell => cell.classList.remove('path'));
 
-document.getElementById('gumb').addEventListener('click', generirajLabirint);
-document.addEventListener('keydown', premakniKocko);
+        // BFS algorithm to find the shortest path
+        const queue = [{ x: 1, y: 1, path: [] }];
+        const visited = new Set();
+        visited.add(`1,1`);
 
-//pozicija kocke
-function premakniKocko(event) {
-    let currentIndex = Array.from(labirint.children).indexOf(kocka);
-    let row = Math.floor(currentIndex / velikost);
-    let col = currentIndex % velikost;
-    let newRow = row, newCol = col;
+        while (queue.length > 0) {
+            const { x, y, path } = queue.shift();
 
-    //updatea glede na pritisnjeno tipko
-    switch (event.key) {
-        case 'ArrowUp': newRow--; break;
-        case 'ArrowDown': newRow++; break;
-        case 'ArrowLeft': newCol--; break;
-        case 'ArrowRight': newCol++; break;
-        default: return; 
-    }
-//cekira da ni zid
-    if (newRow >= 0 && newRow < velikost && newCol >= 0 && newCol < velikost) {
-        let newCell = labirint.children[newRow * velikost + newCol];
-        if (!newCell.classList.contains('zid')) {
-           //premakne kocko na novo pozicijo
-            kocka.classList.remove('kocka');
-            kocka = newCell;
-            //gleda ce je kocka na cilju
-            kocka.classList.add('kocka');
-            if (kocka === cilj) {
-                swal("CONGRATS!", "You reached the finish line!", "success").then(() => {
-                    generirajLabirint();
+            // If we reach the finish, highlight the path
+            if (x === gridSize - 2 && y === gridSize - 2) {
+                path.forEach(({ x, y }) => {
+                    const cell = labyrinth.children[y * gridSize + x];
+                    if (!cell.classList.contains('start') && !cell.classList.contains('finish') && !cell.classList.contains('player')) {
+                        cell.classList.add('path');
+                    }
                 });
+
+                // Reapply the player class to ensure it's always visible
+                const playerCell = labyrinth.children[playerPosition.y * gridSize + playerPosition.x];
+                playerCell.classList.add('player');
+                return;
+            }
+
+            // Explore neighbors
+            const directions = [
+                { dx: 1, dy: 0 }, // Right
+                { dx: -1, dy: 0 }, // Left
+                { dx: 0, dy: 1 }, // Down
+                { dx: 0, dy: -1 } // Up
+            ];
+
+            for (const dir of directions) {
+                const newX = x + dir.dx;
+                const newY = y + dir.dy;
+
+                if (
+                    newX >= 0 && newX < gridSize &&
+                    newY >= 0 && newY < gridSize &&
+                    layout[newY][newX] === 0 &&
+                    !visited.has(`${newX},${newY}`)
+                ) {
+                    visited.add(`${newX},${newY}`);
+                    queue.push({ x: newX, y: newY, path: [...path, { x, y }] });
+                }
             }
         }
     }
-}
+
+    // Render the initial maze
+    renderMaze();
+
+    // Handle keyboard input
+    document.addEventListener('keydown', (event) => {
+        switch (event.key) {
+            case 'ArrowUp':
+                movePlayer(0, -1);
+                break;
+            case 'ArrowDown':
+                movePlayer(0, 1);
+                break;
+            case 'ArrowLeft':
+                movePlayer(-1, 0);
+                break;
+            case 'ArrowRight':
+                movePlayer(1, 0);
+                break;
+        }
+    });
+
+    // Handle "Show Path" button click
+    showPathButton.addEventListener('click', showSolution);
+});
