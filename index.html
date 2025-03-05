@@ -4,13 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Labyrinth Game</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/bvambient.css">
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 <body>
+    <div id="ambient"></div> <!-- Ambient background -->
     <h1>Labyrinth Game</h1>
     <button id="showPath">Show Path</button>
     <div id="labyrinth"></div>
-    <script src="script.js"></script>
+    <script src="scripts/script.js"></script>
+    <script src="scripts/bvambient.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var demo1 = new BVAmbient({
+                selector: "#ambient",
+                fps: 60,
+                max_transition_speed: 12000,
+                min_transition_speed: 8000,
+                particle_number: 30,
+                particle_maxwidth: 30,
+                particle_minwidth: 10,
+                particle_radius: 50,
+                particle_opacity: true,
+                particle_colision_change: true,
+                particle_background: "#58c70c"
+            });
+        });
+    </script>
 </body>
 </html>

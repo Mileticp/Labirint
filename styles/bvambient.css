@@ -1,0 +1,5 @@
+.bvambient_particle {
+    position: absolute;
+    pointer-events: none;
+    transition: top linear, left linear;
+}
