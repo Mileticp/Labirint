@@ -64,4 +64,10 @@ h1 {
     pointer-events: none; /* Ensure it doesn't interfere with clicks */
 }
 
+.swal-text{
+    color: black;
+    font-weight: 700;
+    
+}
+
 
