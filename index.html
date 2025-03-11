@@ -7,12 +7,22 @@
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/bvambient.css">
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <link rel="icon" type="image/x-icon" href="images/labirint.png">
 </head>
 <body>
     <div id="ambient"></div> <!-- Ambient background -->
-    <h1>Labyrinth Game</h1>
+    <h1>Labyrinth game</h1>
     <button id="showPath">Show Path</button>
     <div id="labyrinth"></div>
+    <div id="timer-container">
+        <div id="timer">40</div>
+        <span>seconds</span>
+    </div>
+    <div id="difficulty-buttons">
+        <button id="easy">Easy</button>
+        <button id="medium">Medium</button>
+        <button id="hard">Hard</button>
+    </div>
     <script src="scripts/script.js"></script>
     <script src="scripts/bvambient.js"></script>
     <script>

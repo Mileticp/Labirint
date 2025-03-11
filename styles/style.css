@@ -22,8 +22,8 @@ h1 {
 
 #labyrinth {
     display: grid;
-    grid-template-columns: repeat(20, 30px); /* Larger grid */
-    grid-template-rows: repeat(20, 30px); /* Larger grid */
+    grid-template-columns: repeat(20, 30px); 
+    grid-template-rows: repeat(20, 30px);
     gap: 1px;
 }
 
@@ -51,7 +51,7 @@ h1 {
 }
 
 .path {
-    background-color: yellow; /* Color for the solution path */
+    background-color: yellow; 
 }
 
 #ambient {
@@ -60,8 +60,8 @@ h1 {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: -1; /* Ensure it stays behind other content */
-    pointer-events: none; /* Ensure it doesn't interfere with clicks */
+    z-index: -1; 
+    pointer-events: none; 
 }
 
 .swal-text{
@@ -70,4 +70,47 @@ h1 {
     
 }
 
+#difficulty-buttons {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+#easy, #medium, #hard {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #58c70c;
+    color: white;
+
+}
+
+#easy:hover, #medium:hover, #hard:hover {
+    background-color: #4aa80a;
+}
+
+#timer-container {
+    position: absolute;
+    top: 50%;
+    right: 10%;
+    transform: translateY(-50%);
+    text-align: center;
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+#timer {
+    font-size: 72px; 
+    font-weight: bold;
+    color: #58c70c;
+    margin-bottom: 10px;
+}
+
+#timer-container span {
+    font-size: 24px; 
+    color: #777;
+}
 
