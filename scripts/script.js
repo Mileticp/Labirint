@@ -66,9 +66,9 @@ document.addEventListener('DOMContentLoaded', () => {
             [1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1],
             [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1],
             [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1],
-            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1],
-            [1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1],
-            [1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1],
+            [1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1],
+            [1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1],
+            [1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1],
             [1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1],
             [1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1],
             [1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1],
@@ -78,10 +78,9 @@ document.addEventListener('DOMContentLoaded', () => {
         ]
     };
 
-    // Show instructions using SweetAlert
+
     swal("Welcome to the Labyrinth Game!", "Use the arrow keys to navigate through the labyrinth. Reach the green finish area to win!");
 
-    // Function to render the maze
     function renderMaze() {
         labyrinth.innerHTML = '';
         for (let y = 0; y < gridSize; y++) {
@@ -114,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
         labyrinth.children[playerPosition.y * gridSize + playerPosition.x].appendChild(player);
     }
 
-    // Function to move the player
+
     function movePlayer(dx, dy) {
         const newX = playerPosition.x + dx;
         const newY = playerPosition.y + dy;
@@ -142,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Function to show the solution path
+
     function showSolution() {
         const pathCells = document.querySelectorAll('.path');
         pathCells.forEach(cell => cell.classList.remove('path'));
@@ -176,10 +175,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const directions = [
-                { dx: 1, dy: 0 }, // Right
-                { dx: -1, dy: 0 }, // Left
-                { dx: 0, dy: 1 }, // Down
-                { dx: 0, dy: -1 } // Up
+                { dx: 1, dy: 0 }, // Desno
+                { dx: -1, dy: 0 }, // Levo
+                { dx: 0, dy: 1 }, // Dol
+                { dx: 0, dy: -1 } // Gor
             ];
 
             for (const dir of directions) {
@@ -199,7 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Timer logic
+    
     let timerInterval;
     let timeLeft;
 
@@ -232,40 +231,40 @@ document.addEventListener('DOMContentLoaded', () => {
         updateTimerDisplay();
     }
 
-    // Event listeners for difficulty buttons
+    
     easyButton.addEventListener('click', () => {
         layout = layouts.easy;
         playerPosition = { x: 1, y: 1 };
         renderMaze();
-        startTimer(40); // 40 seconds for easy
+        startTimer(40); 
     });
 
     mediumButton.addEventListener('click', () => {
         layout = layouts.medium;
         playerPosition = { x: 1, y: 1 };
         renderMaze();
-        startTimer(30); // 30 seconds for medium
+        startTimer(30); 
     });
 
     hardButton.addEventListener('click', () => {
         layout = layouts.hard;
         playerPosition = { x: 1, y: 1 };
         renderMaze();
-        startTimer(20); // 20 seconds for hard
+        startTimer(20); 
     });
 
-    // Event listener for the show path button
+    
     showPathButton.addEventListener('click', () => {
         showSolution();
-        decreaseTimerBy10Seconds(); // Decrease timer by 10 seconds
+        decreaseTimerBy10Seconds(); 
     });
 
-    // Initial render with the easy layout
+    
     layout = layouts.easy;
     renderMaze();
-    startTimer(40); // Start with 40 seconds for easy
+    startTimer(40); 
 
-    // Event listener for arrow keys
+    
     document.addEventListener('keydown', (event) => {
         switch (event.key) {
             case 'ArrowUp':
