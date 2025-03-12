@@ -4,11 +4,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const easyButton = document.getElementById('easy');
     const mediumButton = document.getElementById('medium');
     const hardButton = document.getElementById('hard');
-    const gridSize = 20; // Larger grid
-    let playerPosition = { x: 1, y: 1 }; // Starting position
-    let layout = []; // Maze layout
+    const gridSize = 20; 
+    let playerPosition = { x: 1, y: 1 }; 
+    let layout = []; 
 
-    // Define maze layouts for different difficulties
+    
     const layouts = {
         easy: [
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
