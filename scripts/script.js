@@ -7,8 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const gridSize = 20; 
     let playerPosition = { x: 1, y: 1 }; 
     let layout = []; 
+    let gameActive = true; // Flag to track if the game is still active
 
-    
     const layouts = {
         easy: [
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -78,7 +78,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ]
     };
 
-
     swal("Welcome to the Labyrinth Game!", "Use the arrow keys to navigate through the labyrinth. Reach the green finish area to win!");
 
     function renderMaze() {
@@ -113,8 +112,9 @@ document.addEventListener('DOMContentLoaded', () => {
         labyrinth.children[playerPosition.y * gridSize + playerPosition.x].appendChild(player);
     }
 
-
     function movePlayer(dx, dy) {
+        if (!gameActive) return; // If the game is not active, do not move the player
+
         const newX = playerPosition.x + dx;
         const newY = playerPosition.y + dy;
 
@@ -131,6 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 cell.classList.add('player');
 
                 if (playerPosition.x === gridSize - 2 && playerPosition.y === gridSize - 2) {
+                    gameActive = false; // Disable movement when the finish line is reached
                     clearInterval(timerInterval); // Stop the timer
                     swal("Congratulations!", "You've reached the finish!", "success")
                         .then(() => {
@@ -140,7 +141,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
-
 
     function showSolution() {
         const pathCells = document.querySelectorAll('.path');
@@ -175,10 +175,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const directions = [
-                { dx: 1, dy: 0 }, // Desno
-                { dx: -1, dy: 0 }, // Levo
-                { dx: 0, dy: 1 }, // Dol
-                { dx: 0, dy: -1 } // Gor
+                { dx: 1, dy: 0 }, // Right
+                { dx: -1, dy: 0 }, // Left
+                { dx: 0, dy: 1 }, // Down
+                { dx: 0, dy: -1 } // Up
             ];
 
             for (const dir of directions) {
@@ -198,7 +198,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    
     let timerInterval;
     let timeLeft;
 
@@ -212,6 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
             updateTimerDisplay();
 
             if (timeLeft <= 0) {
+                gameActive = false; // Disable movement when time runs out
                 clearInterval(timerInterval);
                 swal("Time's up!", "You didn't reach the finish in time. Try again!", "error")
                     .then(() => {
@@ -227,16 +227,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function decreaseTimerBy10Seconds() {
-        timeLeft = Math.max(timeLeft - 10, 0); // Ensure timer doesn't go below 0
+        timeLeft = Math.max(timeLeft - 10, 0); 
         updateTimerDisplay();
     }
 
-    
     easyButton.addEventListener('click', () => {
         layout = layouts.easy;
         playerPosition = { x: 1, y: 1 };
         renderMaze();
         startTimer(40); 
+        gameActive = true; 
     });
 
     mediumButton.addEventListener('click', () => {
@@ -244,6 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
         playerPosition = { x: 1, y: 1 };
         renderMaze();
         startTimer(30); 
+        gameActive = true; 
     });
 
     hardButton.addEventListener('click', () => {
@@ -251,21 +252,22 @@ document.addEventListener('DOMContentLoaded', () => {
         playerPosition = { x: 1, y: 1 };
         renderMaze();
         startTimer(20); 
+        gameActive = true; 
     });
 
-    
     showPathButton.addEventListener('click', () => {
         showSolution();
         decreaseTimerBy10Seconds(); 
     });
 
-    
     layout = layouts.easy;
     renderMaze();
     startTimer(40); 
+    gameActive = true; 
 
-    
     document.addEventListener('keydown', (event) => {
+        if (!gameActive) return; // If the game is not active, ignore keydown events
+
         switch (event.key) {
             case 'ArrowUp':
                 movePlayer(0, -1);
